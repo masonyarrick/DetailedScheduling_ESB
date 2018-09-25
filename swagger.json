@@ -1,0 +1,858 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Detailed production scheduling shall be defined as the collection of activities that take the production schedule and determine the optimal use of local resources to meet the production schedule requirements. This may include ordering the requests for minimal equipment set-up or cleaning, merging requests for optimal use of equipment and splitting requests when required because of batch sizes or limited production rates. Detailed production scheduling takes into account local situations and resource availability.",
+    "version" : "1.0.0",
+    "title" : "Detailed Scheduling ESB Contract",
+    "contact" : {
+      "email" : "mason.yarrick@bhp.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths" : { },
+  "definitions" : {
+    "WorkScheduledMessage" : {
+      "type" : "object",
+      "description" : "The work scheduled and work rescheduled events provide the ability for Level 3 detailed scheduling activities to provide notification of new and revised work schedules and associated material lots/sublot information. Figure 20 provides a typical set of subscribers to the work scheduled and work rescheduled events. Any new work schedule may introduce new material lots/sublots (with a planned disposition) or may change already defined material lots/sublots. Consequently, the work scheduled operations event shall include a work schedule and any added or changed material lots/sublots. It may also need to include a changed and/or deleted work schedule and its associated material lots/sublots, depending upon local implementation rules.",
+      "required" : [ "workSchedules", "equipment", "materialLots" ],
+      "properties" : {
+        "workSchedules" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WorkSchedule"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WorkSchedule"
+              }
+            },
+            "deleted" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WorkSchedule"
+              }
+            }
+          }
+        },
+        "equipment" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Equipment"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Equipment"
+              }
+            }
+          }
+        },
+        "materialLots" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/MaterialLot"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/MaterialLot"
+              }
+            }
+          }
+        }
+      }
+    },
+    "WorkRescheduledMessage" : {
+      "type" : "object",
+      "description" : "The work rescheduled event is similar to a work scheduled event, and may introduce new material lots/sublots (with a planned disposition) or may change already-defined material lots/sublots (with a planned disposition). Consequently, any change to a work schedule could potentially result in the change of an existing work schedule or the deletion of an existing work schedule and an addition of a new work schedule replacing the previous work schedule (or part thereof). The work rescheduled event shall also include added, changed and/or deleted material lots/sublots resulting from the rescheduling activity.",
+      "required" : [ "workSchedules", "equipment", "materialLots" ],
+      "properties" : {
+        "workSchedules" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WorkSchedule"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WorkSchedule"
+              }
+            },
+            "deleted" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/WorkSchedule"
+              }
+            }
+          }
+        },
+        "equipment" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Equipment"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Equipment"
+              }
+            },
+            "deleted" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Equipment"
+              }
+            }
+          }
+        },
+        "materialLots" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/MaterialLot"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/MaterialLot"
+              }
+            },
+            "deleted" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/MaterialLot"
+              }
+            }
+          }
+        }
+      }
+    },
+    "WorkDispatchedMessage" : {
+      "type" : "object",
+      "description" : "The work dispatched event provides the ability for Level 3 dispatching activities to provide notification of dispatched work.",
+      "required" : [ "jobList" ],
+      "properties" : {
+        "jobLists" : {
+          "type" : "object",
+          "properties" : {
+            "added" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/JobList"
+              }
+            },
+            "changed" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/JobList"
+              }
+            },
+            "deleted" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/JobList"
+              }
+            }
+          }
+        }
+      }
+    },
+    "WorkSchedule" : {
+      "type" : "object",
+      "description" : "A request for work shall be listed as a work schedule. A work schedule shall be made up of one or more work requests. The work schedule may apply to scheduling of production, maintenance, quality test and inventory, or to other extended categories of activities. A work schedule may be defined for any specific category of work; production, maintenance, quality, or inventory, or it may be defined for a combination of categories. When a combination is selected, then the work requests or segment requirement specifies the category of the work.",
+      "required" : [ "id", "version", "workType", "startTime", "endTime", "publishedDate", "hierarchyScope" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identification of the work schedule and could include version and revision identification. The ID shall be used in other parts of the model when the work schedule needs to be identified.",
+          "example" : "WS-423324"
+        },
+        "version" : {
+          "type" : "number",
+          "description" : "The version number of this schedule.",
+          "example" : 1
+        },
+        "workType" : {
+          "type" : "string",
+          "description" : "Describes the category of work. Required attribute. Defined values are: production, maintenance, quality, inventory, and mixed. “Mixed” shall be used when the work schedule contains several types of work requests and/or segment requirements.",
+          "example" : "{Production,Maintenance,Quality,Inventory,Mixed}"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the work schedule.",
+          "example" : "Load and Haul Schedule"
+        },
+        "startTime" : {
+          "type" : "string",
+          "description" : "The starting time for the associated work schedule, if applicable.",
+          "example" : "201809151000"
+        },
+        "endTime" : {
+          "type" : "string",
+          "description" : "The ending time for the associated work schedule, if applicable.",
+          "example" : "201809151100"
+        },
+        "publishedDate" : {
+          "type" : "string",
+          "description" : "The date and time on which the work schedule was published or generated.",
+          "example" : "201809150800"
+        },
+        "hierarchyScopeId" : {
+          "type" : "string",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "ER-IP"
+        },
+        "schedules" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/WorkSchedule"
+          }
+        },
+        "requests" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/WorkRequest"
+          }
+        }
+      }
+    },
+    "WorkRequest" : {
+      "type" : "object",
+      "description" : "A request for work for an element of work identified by work definition shall be defined as a work request. A work request contains the information required by manufacturing to fulfill scheduled work. This may be a subset of the business information, or it may contain additional information not normally used by the business system. A work request shall contain at least one job order.",
+      "required" : [ "id", "workType", "startTime", "endTime", "hierarchyScope" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identification of the work request. The ID shall be used in other parts of the model when the work request needs to be identified.",
+          "example" : "WR-34435"
+        },
+        "workType" : {
+          "type" : "string",
+          "description" : "Describes the category of work. Required attribute. Defined values are: production, maintenance, quality, inventory, and mixed. “Mixed” shall be used when the work request contains several types of job orders.",
+          "example" : "{Production,Maintenance,Quality,Inventory,Mixed}"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the work request.",
+          "example" : "Request to excavate Block 123."
+        },
+        "startTime" : {
+          "type" : "string",
+          "description" : "When work is to be started, if applicable.",
+          "example" : "201809150800"
+        },
+        "endTime" : {
+          "type" : "string",
+          "description" : "When work is to be completed, if applicable.",
+          "example" : "201809151000"
+        },
+        "priority" : {
+          "type" : "string",
+          "description" : "The priority of the request, if applicable.",
+          "example" : "Highest"
+        },
+        "hierarchyScope" : {
+          "type" : "string",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "ER-IP"
+        },
+        "requests" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/WorkRequest"
+          }
+        },
+        "orders" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/JobOrder"
+          }
+        }
+      }
+    },
+    "JobList" : {
+      "type" : "object",
+      "description" : "A job list shall be defined as a collection of job orders for a specific period of time and selected workcenters or other resources. A job list may be considered as a slice of work schedules. A job list may contain job orders from multiple work requests and work schedules.",
+      "required" : [ "id", "workType", "startTime", "endTime", "publishedDate", "hierarchyScope" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identification of the job list and could include version and revision identification. The ID shall be used in other parts of the model when the job list needs to be identified.",
+          "example" : "JO-423435"
+        },
+        "workType" : {
+          "type" : "string",
+          "description" : "Describes the category of work. Required attribute. Defined values are: production, maintenance, quality, inventory, and mixed. “Mixed” shall be used when the work schedule contains several types of job orders.",
+          "example" : "{Production,Maintenance,Quality,Inventory,Mixed}"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the job list.",
+          "example" : "Hauling Job for Block 123"
+        },
+        "startTime" : {
+          "type" : "string",
+          "description" : "The starting time for the associated job list, if applicable.",
+          "example" : "201809151000"
+        },
+        "endTime" : {
+          "type" : "string",
+          "description" : "The ending time for the associated job list, if applicable.",
+          "example" : "201809151100"
+        },
+        "publishedDate" : {
+          "type" : "string",
+          "description" : "The date and time on which the job list was published or generated.",
+          "example" : "201809150800"
+        },
+        "hierarchyScope" : {
+          "type" : "string",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "ER-IP"
+        },
+        "orders" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/JobOrder"
+          }
+        }
+      }
+    },
+    "JobOrder" : {
+      "type" : "object",
+      "description" : "The smallest unit of work in a job list and a work request shall be defined as a job order. A job order references an associated work master. The work master is a type of work definition.",
+      "required" : [ "id", "workType", "workMasterId", "startTime", "endTime" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identification of the job order. The ID shall be used in other parts of the model when the job order needs to be identified.",
+          "example" : "JO-432432"
+        },
+        "workType" : {
+          "type" : "string",
+          "description" : "Describes the category of work. Required attribute. Defined values are: production, maintenance, quality, inventory, and mixed. “Mixed” shall be used when the work request contains several types of segment requirements.",
+          "example" : "{Production,Maintenance,Quality,Inventory,Mixed}"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the job order.",
+          "example" : "Digging Job Order"
+        },
+        "workMasterId" : {
+          "type" : "string",
+          "description" : "Identifies the associated work master and version to be used, if applicable.",
+          "example" : "ER-EXT"
+        },
+        "startTime" : {
+          "type" : "string",
+          "description" : "When work is to be started, if applicable.",
+          "example" : "201808151100"
+        },
+        "endTime" : {
+          "type" : "string",
+          "description" : "When work is to be completed, if applicable.",
+          "example" : "201808151200"
+        },
+        "priority" : {
+          "type" : "string",
+          "description" : "The priority of the request, if applicable.",
+          "example" : "High"
+        },
+        "hierarchyScopeId" : {
+          "type" : "string",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "ER-IP"
+        },
+        "command" : {
+          "type" : "string",
+          "description" : "Identifies the action the execution management activity is to perform on the job order.",
+          "example" : "{Start,Hold,Cancel,Abort,Stop}"
+        },
+        "dispatchStatus" : {
+          "type" : "string",
+          "description" : "Identifies the status of the entry from the perspective of the dispatch activity. NOTE: This status is similar to what a planner would write on his whiteboard to track a job order.",
+          "example" : "Dispatched"
+        },
+        "commandRule" : {
+          "type" : "string",
+          "description" : "Instruction to execution management activities specifying conditions to execute the command.",
+          "example" : "After JO-2343234 is complete"
+        },
+        "parameters" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/JobOrderParameter"
+          }
+        },
+        "materialRequirements" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MaterialRequirement"
+          }
+        },
+        "equipmentRequirements" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EquipmentRequirement"
+          }
+        }
+      }
+    },
+    "JobOrderParameter" : {
+      "type" : "object",
+      "description" : "Information to be exchanged which cannot be mapped as personnel, equipment, physical asset or material properties shall be known as work request parameters. A work request parameter should include a set of limits that apply to any change to the value, such as quality limits and safety limits.",
+      "required" : [ "id", "value", "valueUnitOfMeasure" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Identification of the parameter for a specific segment.",
+          "example" : "Dig Path"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information of the parameter.",
+          "example" : "The path that the digger will follow."
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "The value, set of values, or range of acceptable values.",
+          "example" : "[X1,Y1],[X2,Y2]"
+        },
+        "valueUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "Unit of measure of the values, if applicable.",
+          "example" : "Polyline"
+        },
+        "parameters" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/JobOrderParameter"
+          }
+        }
+      }
+    },
+    "MaterialRequirement" : {
+      "type" : "object",
+      "description" : "An identification of a material that is expected to be used in the operations request shall be presented as a material requirement. Material requirements contain definitions of materials that may be consumed, produced, replaced, sampled, or otherwise used in manufacturing.",
+      "required" : [ "materialUse", "quantity", "quantityUnitOfMeasure" ],
+      "properties" : {
+        "materialClassId" : {
+          "type" : "string",
+          "description" : "Identifies the associated material class or set of material classes of the requirement for a specific segment requirement.",
+          "example" : "ER-IS-HG"
+        },
+        "materialDefinitionId" : {
+          "type" : "string",
+          "description" : "Identifies the associated material definition or set of material definitions of the requirement for a specific segment requirement.",
+          "example" : "ER-HG1"
+        },
+        "materialLotId" : {
+          "type" : "string",
+          "description" : "Identifies the associated material lot, or set of material lots of the requirement for a specific segment requirement.",
+          "example" : "ROM_F1"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the material requirement definition.",
+          "example" : "Required for consumption by a digger"
+        },
+        "materialUse" : {
+          "type" : "string",
+          "description" : "Identifies the use of the material.",
+          "example" : "Consumed"
+        },
+        "spatialDefinition" : {
+          "type" : "array",
+          "description" : "The location or footprint of this item.",
+          "items" : {
+            "$ref" : "#/definitions/SpatialDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MaterialRequirementProperty"
+          }
+        }
+      }
+    },
+    "MaterialRequirementProperty" : {
+      "type" : "object",
+      "description" : "Properties of the material requirement shall be identified as material requirement properties. Specific elements associated with each material requirement may be included in one or more material requirement properties.",
+      "required" : [ "id", "value", "quantity", "quantityUnitOfMeasure" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "An identification of a property of the associated material property or material class property for a specific segment requirement.",
+          "example" : "Fe"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the material produced requirement property definition.",
+          "example" : "Iron content"
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "The value, set of values, or range of the associated property.  For example Red, Orange, Yellow, Green, Blue, Indigo, Violet.",
+          "example" : "Wet"
+        },
+        "valueUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated property value, if applicable.",
+          "example" : "{Wet,Dry}"
+        },
+        "quantity" : {
+          "type" : "number",
+          "description" : "Specifies the amount of material to be produced, if applicable.",
+          "example" : 1000
+        },
+        "quantityUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "Identifies the unit of measure of the quantity if applicable.",
+          "example" : "Tonnes"
+        }
+      }
+    },
+    "EquipmentRequirement" : {
+      "type" : "object",
+      "description" : "The identification of the number, type, duration, and scheduling of specific equipment and equipment classifications or equipment constraints needed to support the current operations request shall be used as an equipment requirement. Properties of the equipment requirement shall be identified as equipment requirement properties. The operations request may include one or more equipment requirements. Requirements can be as generic as materials of construction, or as specific as a particular piece of equipment. Each of these requirements shall be an instance of the equipment requirement class. Each equipment requirement identifies a general class of equipment (such as reactor vessels), a specific class of equipment (such as isothermal reactors), or a specific piece or set of equipment (such as isothermal reactor #7). The specific requirements on the equipment, or equipment class are listed as equipment requirement property objects.",
+      "required" : [ "equipmentUse", "quantity", "quantityUnitOfMeasure" ],
+      "properties" : {
+        "equipmentClassId" : {
+          "type" : "string",
+          "description" : "Identifies the associated equipment class or set of equipment classes of the requirement for a specific segment requirement.",
+          "example" : "ER-9400"
+        },
+        "equipmentId" : {
+          "type" : "string",
+          "description" : "Identifies the associated equipment set of equipment of the requirement for a specific segment requirement. Typically either equipment class or equipment is specified, but not both.",
+          "example" : "EX7015"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the equipment requirement.",
+          "example" : "Required for digging."
+        },
+        "equipmentUse" : {
+          "type" : "string",
+          "description" : "Defines the expected use of the equipment class or equipment.",
+          "example" : "Digging"
+        },
+        "quantity" : {
+          "type" : "number",
+          "description" : "Specifies the amount of equipment resources required for the parent segment, if applicable.  Applies to each member of the equipment and equipment class sets.",
+          "example" : 1
+        },
+        "quantityUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated quantity, if applicable.",
+          "example" : "Each"
+        },
+        "equipmentLevel" : {
+          "type" : "string",
+          "description" : "A definition of the level of the associated element of the equipment model. For example: enterprise, site, area, unit, Equipment module, Control Module.",
+          "example" : "Work Unit"
+        },
+        "spatialDefinition" : {
+          "type" : "array",
+          "description" : "The location or footprint of this item.",
+          "items" : {
+            "$ref" : "#/definitions/SpatialDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EquipmentRequirementProperty"
+          }
+        }
+      }
+    },
+    "EquipmentRequirementProperty" : {
+      "type" : "object",
+      "description" : "Equipment requirement properties may contain nested equipment requirement properties.",
+      "required" : [ "id", "value", "quantity", "quantityUnitOfMeasure" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "An identification of the associated equipment property or equipment class property for a specific segment requirement. ",
+          "example" : "Dig Rate"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Contains additional information and descriptions of the equipment requirement property definition.",
+          "example" : "The rate that the digger must achieve"
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "The value, set of values, or range of the associated property.  For example: Wet, Dry.",
+          "example" : "At least"
+        },
+        "valueUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated property value, if applicable.",
+          "example" : "{At least,No more than}"
+        },
+        "quantity" : {
+          "type" : "number",
+          "description" : "Specifies the amount of equipment property required for the parent equipment requirement, if applicable.",
+          "example" : 3500
+        },
+        "quantityUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated quantity, if applicable.",
+          "example" : "Tonnes/Hour"
+        },
+        "properties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EquipmentRequirementProperty"
+          }
+        }
+      }
+    },
+    "MaterialLot" : {
+      "type" : "object",
+      "description" : "A representation of a uniquely identified specific amount of material, either countable or weighable shall be named as a material lot. A material lot describes the planned or actual total quantity or amount of material available, its current state, and its specific property values. A material lot may be tested by the execution of a material test specification.",
+      "required" : [ "id", "version", "hierarchyScopeId", "effectiveFrom", "effectiveTo" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identification of a specific material lot, within the scope of the information exchanged (production capability, production schedule, production performance, …) The ID shall be used in other parts of the model when the material lot needs to be identified, such as the production capability for this material lot, or a production response identifying the material lot used.",
+          "example" : "Block XYZ"
+        },
+        "version" : {
+          "type" : "number",
+          "description" : "The version number of this instance of the Material Lot.",
+          "example" : 1
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Status of the material lot. For example, released, approved, blocked, in process, in quality check.",
+          "example" : "In Process"
+        },
+        "materialClassId" : {
+          "type" : "string",
+          "example" : "In-Situ"
+        },
+        "materialDefinitionId" : {
+          "type" : "string",
+          "example" : "HG1"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Additional information about the material lot.",
+          "example" : "ER Crusher"
+        },
+        "storageLocationId" : {
+          "type" : "string",
+          "description" : "An identification of the storage location or a physical location of the material lot.",
+          "example" : "ER-PC"
+        },
+        "quantity" : {
+          "type" : "number",
+          "description" : "The quantity of the material lot.",
+          "example" : 5000
+        },
+        "quantityUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated quantity, if applicable.",
+          "example" : "Tonnes"
+        },
+        "effectiveFrom" : {
+          "type" : "string",
+          "description" : "The timestamp that this state of the Material Lot is effective from.",
+          "example" : "201808151000"
+        },
+        "effectiveTo" : {
+          "type" : "string",
+          "description" : "The timestamp that this state of the Material Lot expires.",
+          "example" : "201808151000"
+        },
+        "spatialDefinition" : {
+          "type" : "array",
+          "description" : "The location or footprint of this item.",
+          "items" : {
+            "$ref" : "#/definitions/SpatialDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MaterialLotProperty"
+          }
+        }
+      }
+    },
+    "MaterialLotProperty" : {
+      "type" : "object",
+      "description" : "Each material can have unique values for zero or more material lot properties, such as a specific pH value for the specific lot of material, or a specific density for the lot of material. A material lot property may be tested by the execution of a material test specification with results exchanged in a QA test specification result. Material lot properties may contain nested material lot properties.",
+      "required" : [ "id", "description", "value", "valueUnitOfMeasure" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "An identification of a specific material class property.",
+          "example" : "DigRate"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Additional information about the material class property.",
+          "example" : "Dig Rate"
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "The value, set of values, or range of the property.",
+          "example" : 3600
+        },
+        "valueUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated property value, if applicable.",
+          "example" : "Tonnes/Hour"
+        }
+      }
+    },
+    "Equipment" : {
+      "type" : "object",
+      "description" : "A representation of the elements of the equipment hierarchy model shown in Part 1 shall be known as equipment. Equipment may be a listing of sites, areas, production units, production lines, work cells, process cells, units, storage zones or storage units. Equipment may be tested by the execution of an equipment capability test specification. Equipment may be made up of other equipment, as presented in the equipment hierarchy model.",
+      "required" : [ "id", "version", "equipmentLevel", "hierarchyScopeId", "effectiveFrom", "effectiveTo" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "A unique identification of a specific piece of equipment, within the scope of the information exchanged (manufacturing operations definition, scheduling, capability and performance) The equipment ID shall be used in other parts of the model when the equipment needs to be identified, such as the production capability for a piece of equipment, or a production response identifying the equipment used.",
+          "example" : "EX7015"
+        },
+        "version" : {
+          "type" : "number",
+          "description" : "The version of this Equipment that this message describes.",
+          "example" : 1
+        },
+        "equipmentLevel" : {
+          "type" : "string",
+          "description" : "An identification of the level in the role based equipment hierarchy.",
+          "example" : "Work Unit"
+        },
+        "equipmentClassId" : {
+          "type" : "string",
+          "description" : "The type of this Equipment item",
+          "example" : "ER-9400"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Additional information about the equipment.",
+          "example" : "Excavator EX7015"
+        },
+        "hierarchyScopeId" : {
+          "type" : "string",
+          "description" : "The part of the supply chain where the Equipment item exists.",
+          "example" : "ER-IP"
+        },
+        "effectiveFrom" : {
+          "type" : "string",
+          "description" : "The timestamp that this Equipment item version is applicable from.",
+          "example" : "201808151000"
+        },
+        "effectiveTo" : {
+          "type" : "string",
+          "description" : "The timestamp that this Equipment item version is applicable to.",
+          "example" : "201808151000"
+        },
+        "spatialDefinition" : {
+          "type" : "array",
+          "description" : "The location or footprint of this item.",
+          "items" : {
+            "$ref" : "#/definitions/SpatialDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/EquipmentProperty"
+          }
+        }
+      }
+    },
+    "EquipmentProperty" : {
+      "type" : "object",
+      "description" : "Properties of equipment shall be listed as equipment properties. An equipment shall have zero or more equipment properties. These specify the current property values of the equipment for the associated equipment class property. Equipment properties may include a unit of measure. An equipment property may be tested by the execution of an equipment capability test specification with results exchanged in an equipment capability test result. Equipment properties may contain nested equipment properties.",
+      "required" : [ "id", "description", "value", "valueUnitOfMeasure" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "An identification of the specific property.",
+          "example" : "DigRate"
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Additional information about the equipment property.",
+          "example" : "Dig Rate"
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "The value, set of values, or range of the property. The value(s) is assumed to be within the range or set of defined values for the related equipment property.",
+          "example" : 3600
+        },
+        "valueUnitOfMeasure" : {
+          "type" : "string",
+          "description" : "The unit of measure of the associated property value, if applicable.",
+          "example" : "Tonnes/Hour"
+        }
+      }
+    },
+    "SpatialDefinition" : {
+      "type" : "object",
+      "description" : "The spatial definition provides a means of communicating 0-dimensional point, 1-dimensional line, or 2-dimensional shape or 3-dimensional solid geospatial location data for planning/scheduling, actuals, resources, and analytics. Spatial definition identifies a value and the pre-defined coordinate reference system using following attributes a)  value; b)  format; c)  spatial reference identifier (SRID); and d)  SRID authority. A fully qualified spatial definition exchange has all 4 attributes as a minimum.  In some information exchanges, sending and receiving applications may have a specified agreement on format, SRID, and SRID authority. Spatial definition is distinct from, and separate to storage location and physical location. Storage location attribute is defined for material lots and material sublots as a non-spatial definition of location. The physical location attribute logically identifies a “place” which is actual physical location of the physical asset.",
+      "properties" : {
+        "value" : {
+          "type" : "string",
+          "description" : "A string serialization EXAMPLE 1 UN/CEFACT CCTS: TextType) of the geospatial information in the format indicated in the format attribute.",
+          "example" : "POLYGON ( (-2594646.99104 11815676.18456, -2594645.14848 11815683.08856, -2594646.99104 11815676.18456 ) )"
+        },
+        "format" : {
+          "type" : "string",
+          "description" : "An enumerator that determines the format of the value attribute.",
+          "example" : "WKT"
+        },
+        "srid" : {
+          "type" : "string",
+          "description" : "SRID is the Spatial Reference Identifier which identifies the coordinate reference system to identify a pre-defined coordinate reference system (pre-configured into communication systems). An identifier from the SRID Authority.",
+          "example" : "6283 (Geocentric Datum of Australia 1994)"
+        },
+        "sridAuthority" : {
+          "type" : "string",
+          "description" : "The SRID authority identifies the authority that defines the coordinate reference system identified by the SRID. EXAMPLE 2 EPSG (see http://www.epsg-registry.org/). An organization may choose to define its own SRIDs. EXAMPLE 3 Reference its own authority.",
+          "example" : "EPSG"
+        }
+      }
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "schemes" : [ "https" ],
+  "basePath" : "/BHP_TECH_SI/DetailedScheduling_ESB/1.0.0"
+}
