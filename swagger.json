@@ -1792,7 +1792,7 @@
           "description" : "This child material sublot(s) is part of the material lot as the whole.",
           "example" : "In-Situ",
           "items" : {
-            "$ref" : "#/definitions/materialSublot"
+            "type" : "string"
           }
         },
         "materialDefinitionIds" : {
