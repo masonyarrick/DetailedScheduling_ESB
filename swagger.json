@@ -2033,7 +2033,7 @@
         },
         "hierarchyScopeId" : {
           "type" : "string",
-          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy. Optionally, hierarchy scope defines the scope of the personnel class definition, such as the site or area where it is defined.",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy. Optionally, hierarchy scope defines the scope of the equipment class definition, such as the site or area where it is defined.",
           "example" : "Eastern Ridge (site)"
         },
         "equipmentClassParentIds" : {
@@ -2131,7 +2131,7 @@
         },
         "hierarchyScopeId" : {
           "type" : "string",
-          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy. Optionally, hierarchy scope defines the scope of the personnel class definition, such as the site or area where it is defined.",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy. Optionally, hierarchy scope defines the scope of the equipment definition, such as the site or area where it is defined.",
           "example" : "Eastern Ridge (site)"
         },
         "equipmentClassIds" : {
@@ -2332,7 +2332,7 @@
         },
         "hierarchyScopeId" : {
           "type" : "string",
-          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy. Optionally, hierarchy scope defines the scope of the personnel class definition, such as the site or area where it is defined.",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy. Optionally, hierarchy scope defines the scope of the person definition, such as the site or area where it is defined.",
           "example" : "Eastern Ridge (site)"
         },
         "name" : {
@@ -2671,15 +2671,20 @@
           "description" : "Required attribute. Uniquely identifies a work alert template.",
           "example" : "WA-ER 1.001"
         },
+        "version" : {
+          "type" : "string",
+          "description" : "Customer ISA-95 attribute for BHP requirement. The version of this work alert template.",
+          "example" : 1
+        },
         "description" : {
           "type" : "string",
           "description" : "Contains additional information and descriptions of the work alert template.",
           "example" : "Work alert template for SOP complete for Extraction"
         },
-        "version" : {
+        "hierarchyScopeId" : {
           "type" : "string",
-          "description" : "Customer ISA-95 attribute for BHP requirement. The version of this work alert template.",
-          "example" : 1
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "Eastern Ridge (site)"
         },
         "workAlertDefinitionId" : {
           "type" : "string",
@@ -2843,13 +2848,18 @@
         },
         "version" : {
           "type" : "string",
-          "description" : "Customer ISA-95 attribute for BHP requirement. The version of this work record specification.",
+          "description" : "Custom ISA-95 attribute for BHP requirement. The version of this work record specification.",
           "example" : 1
         },
         "description" : {
           "type" : "string",
           "description" : "Contains additional information and descriptions of the work record specification.",
           "example" : "Work record specification for Extraction Results"
+        },
+        "hierarchyScopeId" : {
+          "type" : "string",
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "Eastern Ridge (site)"
         },
         "workRecordSpecificationChildIds" : {
           "type" : "array",
@@ -2990,15 +3000,20 @@
           "description" : "A unique identification of a work record entry template. Required attribute. The ID attribute may be modified over the lifecycle of a work record template, although it shall not be completely removed.",
           "example" : "WRET-TRAVEL-SPEED-HIGH 1.0"
         },
+        "version" : {
+          "type" : "string",
+          "description" : "Custome non-ISA-95 attribute. Current version of work record entry template.",
+          "example" : "1.0"
+        },
         "description" : {
           "type" : "string",
           "description" : "Additional information about the work record entry template.",
           "example" : "Work record entry template for High travel speed"
         },
-        "version" : {
+        "hierarchyScopeId" : {
           "type" : "string",
-          "description" : "Custome non-ISA-95 attribute. Current version of work record entry template.",
-          "example" : "1.0"
+          "description" : "Identifies where the exchanged information fits within the role based equipment hierarchy.",
+          "example" : "Eastern Ridge (site)"
         },
         "workRecordTemplanteId" : {
           "type" : "string",
